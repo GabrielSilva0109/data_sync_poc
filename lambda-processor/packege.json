@@ -1,0 +1,17 @@
+{
+  "name": "lambda-processor",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "sam local invoke LambdaProcessorFunction --event event.json",
+    "sam:build": "sam build",
+    "sam:invoke": "sam local invoke LambdaProcessorFunction --event event.json"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.914.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
