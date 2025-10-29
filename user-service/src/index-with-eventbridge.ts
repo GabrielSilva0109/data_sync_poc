@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -12,6 +13,11 @@ app.get('/health', (req: Request, res: Response) => {
     service: 'user-service',
     timestamp: new Date().toISOString()
   });
+});
+
+const eventBridge = new AWS.EventBridge({
+  region: process.env.AWS_REGION,
+  endpoint: process.env.AWS_ENDPOINT
 });
 
 interface UserData {
@@ -43,25 +49,22 @@ app.post('/users', async (req: Request, res: Response) => {
       email: email.trim().toLowerCase()
     };
 
-    // Simulação do EventBridge por enquanto
-    console.log('📋 Usuário criado:', userData);
-    console.log('📤 Simulando publicação no EventBridge...');
-    
-    // Simular evento que seria enviado
-    const eventData = {
-      eventBusName: process.env.EVENT_BUS_NAME || 'user-events-bus',
-      source: 'user-service',
-      detailType: 'UserCreated',
-      detail: userData,
-      timestamp: new Date().toISOString()
+    const params: AWS.EventBridge.PutEventsRequest = {
+      Entries: [
+        {
+          EventBusName: process.env.EVENT_BUS_NAME!,
+          Source: 'user-service',
+          DetailType: 'UserCreated',
+          Detail: JSON.stringify(userData)
+        }
+      ]
     };
-    
-    console.log('✅ Evento simulado:', JSON.stringify(eventData, null, 2));
-    
+
+    const result = await eventBridge.putEvents(params).promise();
+    console.log('✅ Evento publicado:', result);
     res.json({ 
-      message: 'Usuário criado com sucesso! (EventBridge simulado)',
-      user: userData,
-      simulatedEvent: eventData
+      message: 'Usuário criado e evento publicado com sucesso!',
+      user: userData 
     });
   } catch (error) {
     console.error('❌ Erro ao processar requisição:', error);
