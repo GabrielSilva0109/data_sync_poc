@@ -3,9 +3,11 @@
 ## 🏪 Caso de Uso: E-commerce
 
 ### Cenário
+
 Uma loja online precisa sincronizar dados de clientes entre múltiplos sistemas quando um novo usuário se cadastra.
 
 ### Fluxo
+
 ```mermaid
 sequenceDiagram
     participant App as App Mobile
@@ -14,7 +16,7 @@ sequenceDiagram
     participant CRM as CRM System
     participant Email as Email Service
     participant Analytics as Analytics
-    
+
     App->>API: POST /users (nome, email)
     API->>EB: UserCreated Event
     EB->>CRM: Criar perfil cliente
@@ -24,6 +26,7 @@ sequenceDiagram
 ```
 
 ### Implementação
+
 ```javascript
 // Evento publicado pelo User Service
 {
@@ -42,9 +45,11 @@ sequenceDiagram
 ## 🏦 Caso de Uso: Fintech
 
 ### Cenário
+
 Um app financeiro precisa processar transações e notificar múltiplos sistemas para compliance.
 
 ### Benefícios
+
 - ✅ **Auditoria completa** de todas as transações
 - ✅ **Processamento assíncrono** sem afetar UX
 - ✅ **Escalabilidade** para milhões de transações
@@ -53,9 +58,11 @@ Um app financeiro precisa processar transações e notificar múltiplos sistemas
 ## 🚀 Caso de Uso: SaaS Platform
 
 ### Cenário
+
 Uma plataforma SaaS precisa sincronizar dados de usuários entre billing, support e product analytics.
 
 ### Vantagens
+
 - 🔄 **Consistência** de dados entre serviços
 - 📊 **Analytics** em tempo real
 - 💰 **Billing** automático baseado em eventos

@@ -31,11 +31,11 @@ graph TD
     C -->|Triggera| D[⚡ Lambda Processor]
     D -->|Envia Mensagem| E[📬 SQS Queue]
     E -->|Consome| F[🔄 SQS Consumer]
-    
+
     B -.->|Logs| G[📊 CloudWatch]
     D -.->|Logs| G
     F -.->|Logs| G
-    
+
     C -.->|Pode triggerar| H[📧 Outros Sistemas]
     C -.->|Pode triggerar| I[📈 Analytics]
     C -.->|Pode triggerar| J[🔔 Notificações]
@@ -43,13 +43,13 @@ graph TD
 
 ### 🧩 **Componentes do Sistema**
 
-| Serviço | Responsabilidade | Tecnologia |
-|---------|------------------|------------|
-| **🌐 User Service** | API REST para receber dados de usuários | Node.js + Express + TypeScript |
-| **📡 EventBridge** | Roteamento inteligente de eventos | AWS EventBridge (LocalStack) |
-| **⚡ Lambda Processor** | Processamento assíncrono de eventos | AWS Lambda + Node.js |
-| **📬 SQS Queue** | Fila de mensagens confiável | AWS SQS (LocalStack) |
-| **🔄 SQS Consumer** | Processamento final das mensagens | Node.js + AWS SDK |
+| Serviço                 | Responsabilidade                        | Tecnologia                     |
+| ----------------------- | --------------------------------------- | ------------------------------ |
+| **🌐 User Service**     | API REST para receber dados de usuários | Node.js + Express + TypeScript |
+| **📡 EventBridge**      | Roteamento inteligente de eventos       | AWS EventBridge (LocalStack)   |
+| **⚡ Lambda Processor** | Processamento assíncrono de eventos     | AWS Lambda + Node.js           |
+| **📬 SQS Queue**        | Fila de mensagens confiável             | AWS SQS (LocalStack)           |
+| **🔄 SQS Consumer**     | Processamento final das mensagens       | Node.js + AWS SDK              |
 
 ## 🚀 Como executar
 
@@ -84,6 +84,7 @@ docker-compose ps
 ### 🧪 **3. Testar o Sistema**
 
 #### **Método 1: Script Automatizado**
+
 ```bash
 # Windows
 .\test-simple.ps1
@@ -95,11 +96,13 @@ chmod +x test-simple.sh && ./test-simple.sh
 #### **Método 2: Testes Manuais**
 
 **Health Check:**
+
 ```bash
 curl http://localhost:3000/health
 ```
 
 **Criar Usuário:**
+
 ```bash
 curl -X POST http://localhost:3000/users \
   -H "Content-Type: application/json" \
@@ -110,6 +113,7 @@ curl -X POST http://localhost:3000/users \
 ```
 
 **Resposta Esperada:**
+
 ```json
 {
   "message": "Usuário criado com sucesso! (EventBridge simulado)",
@@ -133,9 +137,11 @@ curl -X POST http://localhost:3000/users \
 ## 📡 API Reference
 
 ### **POST /users**
+
 Cria um novo usuário e publica evento no EventBridge.
 
 **Request Body:**
+
 ```json
 {
   "name": "string (obrigatório, não vazio)",
@@ -144,14 +150,17 @@ Cria um novo usuário e publica evento no EventBridge.
 ```
 
 **Responses:**
+
 - `200` - Usuário criado com sucesso
 - `400` - Dados inválidos (validação)
 - `500` - Erro interno do servidor
 
 ### **GET /health**
+
 Health check do serviço.
 
 **Response:**
+
 ```json
 {
   "status": "OK",
@@ -198,23 +207,27 @@ data_sync_poc/
 ## 🛠️ Tecnologias Utilizadas
 
 ### **Backend & APIs**
+
 - ![Node.js](https://img.shields.io/badge/Node.js-18+-green?logo=node.js) **Node.js 18+** - Runtime JavaScript
 - ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?logo=typescript) **TypeScript** - Tipagem estática
 - ![Express](https://img.shields.io/badge/Express-4.19+-lightgrey?logo=express) **Express.js** - Framework web
 
 ### **Cloud & Infrastructure**
+
 - ![AWS](https://img.shields.io/badge/AWS-EventBridge-orange?logo=amazon-aws) **AWS EventBridge** - Event routing
 - ![AWS](https://img.shields.io/badge/AWS-SQS-orange?logo=amazon-aws) **AWS SQS** - Message queuing
 - ![AWS](https://img.shields.io/badge/AWS-Lambda-orange?logo=amazon-aws) **AWS Lambda** - Serverless computing
 - ![LocalStack](https://img.shields.io/badge/LocalStack-4.9+-purple) **LocalStack** - AWS simulation
 
 ### **DevOps & Development**
+
 - ![Docker](https://img.shields.io/badge/Docker-Compose-blue?logo=docker) **Docker & Docker Compose** - Containerization
 - ![PowerShell](https://img.shields.io/badge/PowerShell-7+-blue?logo=powershell) **PowerShell/Bash** - Automation scripts
 
 ## 🔧 Desenvolvimento Local
 
 ### **Opção 1: Desenvolvimento Completo com Docker**
+
 ```bash
 # Subir todos os serviços
 docker-compose up -d
@@ -225,6 +238,7 @@ docker-compose logs -f sqs-consumer
 ```
 
 ### **Opção 2: Desenvolvimento Híbrido**
+
 ```bash
 # Subir apenas infraestrutura
 docker-compose up -d localstack
@@ -234,18 +248,20 @@ cd user-service
 npm install && npm run dev
 
 # Em outro terminal
-cd sqs-consumer  
+cd sqs-consumer
 npm install && npm run dev
 ```
 
 ### **📊 Monitoramento e Logs**
 
 **Ver logs de um serviço específico:**
+
 ```bash
 docker-compose logs -f user-service --tail=50
 ```
 
 **Ver status de todos os containers:**
+
 ```bash
 docker-compose ps
 ```
@@ -253,6 +269,7 @@ docker-compose ps
 ## 🌟 Funcionalidades Implementadas
 
 ### ✅ **Core Features**
+
 - [x] 🌐 **API REST completa** com validações robustas
 - [x] 📝 **Validação de dados** (nome obrigatório, email válido)
 - [x] 🔄 **Simulação de EventBridge** com logs estruturados
@@ -262,6 +279,7 @@ docker-compose ps
 - [x] 🧪 **Testes automatizados** de validação
 
 ### 🔮 **Próximas Funcionalidades**
+
 - [ ] 📡 **Integração real com EventBridge**
 - [ ] ⚡ **Lambda function ativa** para processamento
 - [ ] 📬 **SQS consumer operacional**
@@ -273,6 +291,7 @@ docker-compose ps
 ## 🎭 Cenários de Teste
 
 ### **✅ Cenário 1: Criação de Usuário Válido**
+
 ```bash
 # Request
 POST /users
@@ -290,6 +309,7 @@ POST /users
 ```
 
 ### **❌ Cenário 2: Validação de Nome**
+
 ```bash
 # Request
 POST /users
@@ -305,6 +325,7 @@ POST /users
 ```
 
 ### **❌ Cenário 3: Validação de Email**
+
 ```bash
 # Request
 POST /users
@@ -324,6 +345,7 @@ POST /users
 ### **🔧 Problemas Comuns**
 
 **1. Container não inicia**
+
 ```bash
 # Verificar logs
 docker-compose logs <service-name>
@@ -333,6 +355,7 @@ docker-compose build --no-cache <service-name>
 ```
 
 **2. Porta já em uso**
+
 ```bash
 # Verificar processos na porta 3000
 netstat -ano | findstr :3000  # Windows
@@ -343,6 +366,7 @@ docker-compose down
 ```
 
 **3. LocalStack não responde**
+
 ```bash
 # Aguardar inicialização completa
 docker-compose logs localstack | grep "Ready"
@@ -352,6 +376,7 @@ docker-compose restart localstack
 ```
 
 ### **📞 Como pedir ajuda**
+
 1. Execute `docker-compose ps` e inclua o output
 2. Execute `docker-compose logs <service>` para logs específicos
 3. Inclua a mensagem de erro completa
