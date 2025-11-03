@@ -76,17 +76,34 @@ This **Proof of Concept (PoC)** showcases a complete solution for scenarios wher
 
 ### **Installation**
 
-```bash
-# Clone repository
-git clone <repository-url>
-cd data_sync_poc
+#### **Option 1: Simple EventBridge (Recommended)**
 
+```bash
+# No SAM CLI required - uses LocalStack directly
+.\setup-eventbridge-simple.ps1
+
+# Test the setup
+.\test-simple-eventbridge.ps1
+```
+
+#### **Option 2: Full SAM CLI Setup (Advanced)**
+
+```bash
+# Install SAM CLI first (requires Administrator)
+.\install-sam-cli.ps1
+
+# Then setup EventBridge with SAM
+.\setup-eventbridge.ps1
+```
+
+#### **Option 3: Docker Only (Basic)**
+
+```bash
 # Start all services
 docker-compose up -d
 
-# Run automated tests
-./test-simple.ps1  # Windows
-./test-simple.sh   # Linux/Mac
+# Run basic tests
+.\test-simple.ps1
 ```
 
 ### **API Usage**
