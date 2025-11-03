@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "Data Sync PoC - EventBridge Setup for Publisher/Subscriber pattern"
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    Description: Environment name
+
+  EventBusName:
+    Type: String
+    Default: data-sync-event-bus
+    Description: Custom EventBridge bus name
+
+Globals:
+  Function:
+    Runtime: nodejs18.x
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        NODE_ENV: !Ref Environment
+        EVENT_BUS_NAME: !Ref DataSyncEventBus
+        AWS_REGION: !Ref AWS::Region
+
+Resources:
+  # Custom EventBridge Bus
+  DataSyncEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Ref EventBusName
+      Description: "EventBridge bus for data synchronization between services"
+
+  # EventBridge Rule for User Created events
+  UserCreatedRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: !Ref DataSyncEventBus
+      Name: UserCreatedRule
+      Description: "Captures User Created events from data-sync-poc"
+      EventPattern:
+        source:
+          - "data-sync-poc.user-service"
+        detail-type:
+          - "User Created"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt DataSyncSubscriberFunction.Arn
+          Id: "DataSyncSubscriberTarget"
+
+  # Lambda function that acts as subscriber (this would be in data_sync project)
+  DataSyncSubscriberFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${Environment}-data-sync-subscriber"
+      CodeUri: ../data_sync/
+      Handler: main.handler # Points to handler function in main.ts
+      Description: "Subscriber function that receives events from EventBridge"
+      Events:
+        UserCreatedEvent:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !Ref DataSyncEventBus
+            Pattern:
+              source:
+                - "data-sync-poc.user-service"
+              detail-type:
+                - "User Created"
+
+  # Permission for EventBridge to invoke Lambda
+  EventBridgeInvokeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DataSyncSubscriberFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt UserCreatedRule.Arn
+
+  # IAM Role for EventBridge
+  EventBridgeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: EventBridgeExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !GetAtt DataSyncSubscriberFunction.Arn
+
+Outputs:
+  EventBusName:
+    Description: "Name of the EventBridge bus"
+    Value: !Ref DataSyncEventBus
+    Export:
+      Name: !Sub "${AWS::StackName}-EventBusName"
+
+  EventBusArn:
+    Description: "ARN of the EventBridge bus"
+    Value: !GetAtt DataSyncEventBus.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-EventBusArn"
+
+  SubscriberFunctionArn:
+    Description: "ARN of the subscriber Lambda function"
+    Value: !GetAtt DataSyncSubscriberFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-SubscriberFunctionArn"
+
+  EventRuleArn:
+    Description: "ARN of the EventBridge rule"
+    Value: !GetAtt UserCreatedRule.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-EventRuleArn"

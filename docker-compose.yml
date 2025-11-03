@@ -7,6 +7,7 @@ services:
     environment:
       - DEBUG=1
       - AWS_DEFAULT_REGION=us-east-1
+      - SERVICES=events,lambda,logs
     volumes:
       - "./.localstack:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -18,12 +19,15 @@ services:
       - "3000:3000"
     environment:
       - AWS_REGION=us-east-1
-      - EVENT_BUS_NAME=user-events-bus
+      - EVENT_BUS_NAME=data-sync-event-bus
       - AWS_ENDPOINT=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
+      - NODE_ENV=development
     depends_on:
       - localstack
+    volumes:
+      - ./user-service/src:/app/src
 
   sqs-consumer:
     build: ./sqs-consumer

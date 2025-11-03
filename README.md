@@ -18,13 +18,13 @@ This **Proof of Concept (PoC)** showcases a complete solution for scenarios wher
 
 ## 💼 Real-world Use Cases
 
-| Industry | Use Case | Business Value |
-|----------|----------|----------------|
-| **E-commerce** | Sync customer data between CRM, marketing, and analytics | +25% conversion rate |
-| **Fintech** | Process transactions and notify compliance/audit systems | 100% audit compliance |
-| **SaaS** | Integrate user data across multiple microservices | -50% integration bugs |
-| **IoT** | Process sensor events for real-time dashboards and alerts | Real-time insights |
-| **Marketplace** | Sync inventory between sellers and central system | -30% overselling |
+| Industry        | Use Case                                                  | Business Value        |
+| --------------- | --------------------------------------------------------- | --------------------- |
+| **E-commerce**  | Sync customer data between CRM, marketing, and analytics  | +25% conversion rate  |
+| **Fintech**     | Process transactions and notify compliance/audit systems  | 100% audit compliance |
+| **SaaS**        | Integrate user data across multiple microservices         | -50% integration bugs |
+| **IoT**         | Process sensor events for real-time dashboards and alerts | Real-time insights    |
+| **Marketplace** | Sync inventory between sellers and central system         | -30% overselling      |
 
 ## 🏗️ System Architecture
 
@@ -36,17 +36,18 @@ This **Proof of Concept (PoC)** showcases a complete solution for scenarios wher
 
 ### 🧩 **Core Components**
 
-| Service | Responsibility | Technology Stack |
-|---------|----------------|------------------|
-| **🌐 User Service** | REST API for user data ingestion | Node.js + Express + TypeScript |
-| **📡 EventBridge** | Intelligent event routing and filtering | AWS EventBridge (LocalStack) |
-| **⚡ Lambda Processor** | Asynchronous event processing | AWS Lambda + Node.js |
-| **📬 SQS Queue** | Reliable message queuing | AWS SQS (LocalStack) |
-| **🔄 SQS Consumer** | Final message processing and business logic | Node.js + AWS SDK |
+| Service                 | Responsibility                              | Technology Stack               |
+| ----------------------- | ------------------------------------------- | ------------------------------ |
+| **🌐 User Service**     | REST API for user data ingestion            | Node.js + Express + TypeScript |
+| **📡 EventBridge**      | Intelligent event routing and filtering     | AWS EventBridge (LocalStack)   |
+| **⚡ Lambda Processor** | Asynchronous event processing               | AWS Lambda + Node.js           |
+| **📬 SQS Queue**        | Reliable message queuing                    | AWS SQS (LocalStack)           |
+| **🔄 SQS Consumer**     | Final message processing and business logic | Node.js + AWS SDK              |
 
 ## 🌟 Key Features
 
 ### ✅ **Implemented (MVP)**
+
 - [x] 🌐 **Complete REST API** with robust validations
 - [x] 📝 **Data validation** (required name, valid email format)
 - [x] 🔄 **EventBridge simulation** with structured logging
@@ -56,6 +57,7 @@ This **Proof of Concept (PoC)** showcases a complete solution for scenarios wher
 - [x] 🧪 **Automated validation tests**
 
 ### 🔮 **Upcoming Features**
+
 - [ ] 📡 **Real EventBridge integration**
 - [ ] ⚡ **Active Lambda functions** for processing
 - [ ] 📬 **Operational SQS consumer**
@@ -67,11 +69,13 @@ This **Proof of Concept (PoC)** showcases a complete solution for scenarios wher
 ## 🚀 Quick Start
 
 ### **Prerequisites**
+
 - ✅ Docker & Docker Compose
 - ✅ Node.js 18+
 - ✅ PowerShell (Windows) or Bash (Linux/Mac)
 
 ### **Installation**
+
 ```bash
 # Clone repository
 git clone <repository-url>
@@ -86,6 +90,7 @@ docker-compose up -d
 ```
 
 ### **API Usage**
+
 ```bash
 # Create user
 curl -X POST http://localhost:3000/users \
@@ -102,6 +107,7 @@ curl http://localhost:3000/health
 ## 📊 Technical Specifications
 
 ### **Technology Stack**
+
 - **Backend**: Node.js 18+ with TypeScript
 - **Framework**: Express.js for REST API
 - **Cloud**: AWS EventBridge, SQS, Lambda
@@ -110,6 +116,7 @@ curl http://localhost:3000/health
 - **Testing**: PowerShell/Bash automation scripts
 
 ### **Performance Characteristics**
+
 - **Throughput**: Designed for 10k+ events/minute
 - **Latency**: Sub-100ms API response time
 - **Availability**: 99.9% uptime target
@@ -118,6 +125,7 @@ curl http://localhost:3000/health
 ## 🎭 Test Scenarios
 
 ### **✅ Valid User Creation**
+
 ```json
 POST /users
 {
@@ -128,6 +136,7 @@ POST /users
 ```
 
 ### **❌ Validation Errors**
+
 ```json
 POST /users
 {
@@ -140,6 +149,7 @@ POST /users
 ## 🌐 Production Deployment
 
 ### **AWS Resources Required**
+
 - EventBridge Custom Bus
 - Lambda Functions (Node.js 18)
 - SQS Standard Queues
@@ -147,6 +157,7 @@ POST /users
 - IAM Roles and Policies
 
 ### **Estimated Costs** (Monthly)
+
 - EventBridge: ~$10 (1M events)
 - Lambda: ~$15 (1M executions)
 - SQS: ~$5 (1M messages)
