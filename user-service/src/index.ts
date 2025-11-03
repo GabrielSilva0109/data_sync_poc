@@ -18,7 +18,7 @@ app.get('/health', (req: Request, res: Response) => {
 // Configure EventBridge client
 const eventBridge = new AWS.EventBridge({
   region: process.env.AWS_REGION || 'us-east-1',
-  endpoint: process.env.AWS_ENDPOINT || undefined, // For LocalStack
+  endpoint: process.env.AWS_ENDPOINT || undefined,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID || undefined,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || undefined
 });
@@ -42,7 +42,6 @@ app.post('/users', async (req: Request, res: Response) => {
     if (!name || typeof name !== 'string' || name.trim().length === 0) {
       return res.status(400).json({ error: 'Name is required and must be a valid string' });
     }
-
     if (!email || typeof email !== 'string' || !isValidEmail(email)) {
       return res.status(400).json({ error: 'Email is required and must have a valid format' });
     }
@@ -70,11 +69,9 @@ app.post('/users', async (req: Request, res: Response) => {
       ]
     };
 
-    console.log('📤 Publishing event to EventBridge:', JSON.stringify(eventParams, null, 2));
+    console.log('Publishing event to EventBridge:', JSON.stringify(eventParams, null, 2));
     
     const result = await eventBridge.putEvents(eventParams).promise();
-    
-    console.log('✅ Event published successfully:', result);
     
     res.json({ 
       message: 'User created and event published successfully!',
